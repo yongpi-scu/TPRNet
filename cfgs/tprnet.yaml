@@ -1,0 +1,68 @@
+dataset: Thyroid scintigraphy
+
+data:
+  train_dir: NuclearMedicineData/WCH/
+  train_file: dataset/wch_dataset.pkl
+  val_dir: NuclearMedicineData/PCH/
+  val_file: dataset/pch_dataset.pkl
+  color_channels: 3
+  num_classes: 6
+  normalize:
+    mean: None
+    std: None
+
+train:
+  batch_size: 16
+  num_workers: 8
+  pin_memory: true
+  aug_trans:
+    trans_seq: [fixed_resize, random_horizontal_flip, to_tensor]
+    flip_prob: 0.5
+    fixed_resize:
+      size: [224, 224]
+    
+
+eval:
+  batch_size: 16
+  num_workers: 8
+  pin_memory: true
+  ckpt_path: None
+  aug_trans:
+    trans_seq: [fixed_resize, to_tensor]
+    fixed_resize:
+      size: [224, 224]
+
+logging:
+  use_logging: true
+  use_tensorboard: true
+
+optim:
+  num_epochs: 200
+  optim_method: adam
+  sgd:
+    base_lr: 1e-2
+    momentum: 0.9
+    weight_decay: 5e-4
+    nesterov: false
+  adam:
+    base_lr: 1e-3
+    betas: [0.9, 0.999]
+    weight_decay: 1e-4
+    momentum: 0.9
+    amsgrad: false
+  use_lr_decay: false
+  lr_decay_method: lambda
+  cosine: None
+  warmup_cosine: None
+
+criterion:
+  criterion_method: cross_entropy
+  class_weights: [1,1,1,1,1,1]
+
+network:
+  model_name: tprnet
+  model_suffix: tprnet_224
+  drop_prob: 0.3
+  use_parallel: false
+  seed: 22
+  num_gpus: 0
