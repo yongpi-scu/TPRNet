@@ -15,7 +15,7 @@ def HuMoments(img):
     humoments = np.log(np.abs(humoments))
     return humoments.squeeze()
 
-def glcm_features(img, distance=5, angle=45):
+def glcm_features(img, distance=5, angle=0):
     glcm = greycomatrix(np.array(img), distances=[distance], angles=[angle], levels=256, symmetric=True, normed=False)
     contrast = greycoprops(glcm, 'contrast')[0][0]
     correlation = greycoprops(glcm, 'correlation')[0][0]
@@ -54,13 +54,13 @@ class ThyroidDataset(Dataset):
     def __get_V_h(self, I_r):
         gray = np.array(I_r.convert("L").resize([100, 100]))
         # glcm 0
-        glcm_0 = glcm_features(gray,angle=0)
+        glcm_0 = glcm_features(gray, angle=0)
         # glcm 45
-        glcm_45 = glcm_features(gray,angle=45)
+        glcm_45 = glcm_features(gray, angle=np.pi/4)
         # glcm 90
-        glcm_90 = glcm_features(gray,angle=90)
+        glcm_90 = glcm_features(gray, angle=np.pi/2)
         # glcm 135
-        glcm_135 = glcm_features(gray,angle=135)
+        glcm_135 = glcm_features(gray, angle=3*np.pi/4)
         # humoments
         humoments = HuMoments(gray)
         V_h = torch.tensor(np.hstack([glcm_0,glcm_45,glcm_90,glcm_135,humoments])).float()

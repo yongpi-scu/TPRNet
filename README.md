@@ -7,7 +7,7 @@ code for "Fusing deep and handcrafted features for intelligent recognition of up
 ## Running
 train:
 ```bash
-python train.py --config cfgs/tprnet.yaml --gpu 0 --seed 66 --net tprnet --model tpr_model
+python train.py --config cfgs/tprnet.yaml --gpu 0 --net tprnet --model tpr_model
 ```
 eval:
 ```bash

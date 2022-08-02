@@ -21,8 +21,8 @@ def str2bool(v):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='TPRNet')
-    parser.add_argument('--seed', type=int, default=22,
-                        help='random seed for training. default=22')
+    parser.add_argument('--seed', type=int, default=-1,
+                        help='random seed for training. default=-1')
     parser.add_argument('--use_cuda', default='true', type=str,
                         help='whether use cuda. default: true')
     parser.add_argument('--gpu', default='all', type=str,
@@ -36,13 +36,14 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     num_gpus = set_gpu(args.gpu)
-    # set seed
-    torch.manual_seed(args.seed)
-    torch.cuda.manual_seed(args.seed)
-    torch.cuda.manual_seed_all(args.seed)
-    np.random.seed(args.seed)
-    random.seed(args.seed)
-    torch.backends.cudnn.deterministic = True
+    if args.seed>0:
+        # set seed
+        torch.manual_seed(args.seed)
+        torch.cuda.manual_seed(args.seed)
+        torch.cuda.manual_seed_all(args.seed)
+        np.random.seed(args.seed)
+        random.seed(args.seed)
+        torch.backends.cudnn.deterministic = True
 
     config = parse_yaml(args.config)
     network_params = config['network']
